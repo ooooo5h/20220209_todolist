@@ -1,8 +1,24 @@
 # 사용자 정보와 관련된 기능들을 모아두는 모듈
 from flask_restful import Resource
+from flask_restful_swagger_2 import swagger
 
 class User(Resource):
     
+    @swagger.doc({
+        'tags' : ['user'],
+        'description' : '사용자 정보 조회 기능',
+        'parameters' : [
+            
+        ],
+        'responses' : {
+            '200' : {
+                'description' : '사용자 정보 조회 성공'
+            },
+            '400' : {
+                'description' : '사용자 정보 조회 실패'
+            },
+        }
+    })
     def get(self):
         return {
             'code' : 200,
