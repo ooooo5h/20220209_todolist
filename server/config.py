@@ -7,6 +7,9 @@ class Config(object):
     # SQLAlchemy가 접속할 DB의 연결 정보(URI)
     # 변수이름 바꾸면 X
     SQLALCHEMY_DATABASE_URI = custom_SQLALCHEMY_DATABASE_URI
+    
+    # DB변경 추적 기능 꺼두기
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
         
 class ProductionConfig(Config):
     pass
