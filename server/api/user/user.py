@@ -34,7 +34,20 @@ class User(Resource):
         'tags' : ['user'],
         'description' : '로그인 기능',
         'parameters' : [
-            
+            {
+                'name' : 'u_id',
+                'description' : '로그인할 아이디',
+                'in' : 'formData',
+                'type' : 'string',
+                'required' : True,
+            },
+            {
+                'name' : 'u_pw',
+                'description' : '로그인할 비밀번호',
+                'in' : 'formData',
+                'type' : 'string',
+                'required' : True,
+            }
         ],
         'responses' : {
             '200' : {
@@ -46,7 +59,8 @@ class User(Resource):
         }
     })     
     def post(self):
-        """로그인을 시도합니다."""
+        """로그인을 시도합니다."""      
+          
         return {
             'code' : 200,
             'message' : '임시-로그인기능'
