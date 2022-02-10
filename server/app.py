@@ -3,12 +3,19 @@ from flask_cors import CORS
 from flask_restful_swagger_2 import Api
 from flask_swagger_ui import get_swaggerui_blueprint
 
+# DB와 연동 하기
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
 def create_app(config_name):
     app = Flask(__name__)
     
     CORS(app)
     
     app.config.from_object(f'server.config.{config_name}')
+    
+    db.init_app(app)
     
     api = Api(app, api_spec_url='/api/spec', title='to_do_list', api_version='0.1', catch_all_404s=True)
     
