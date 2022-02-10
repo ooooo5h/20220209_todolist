@@ -73,12 +73,18 @@ class User(Resource):
         args = post_parser.parse_args()
         
         login_user = Users.query.filter(Users.u_id == args['u_id']).filter(Users.u_pw == args['u_pw']).first()
-        print('로그인 유저 : ', login_user)
           
-        return {
-            'code' : 200,
-            'message' : '로그인 성공'
-        }
+        if login_user:            
+            return {
+                'code' : 200,
+                'message' : '로그인 성공'
+            }
+        else : 
+            return {
+                'code' : 400,
+                'message' : '로그인에 실패했습니다.'
+            }, 400
+            
 
     @swagger.doc({
         'tags' : ['user'],
