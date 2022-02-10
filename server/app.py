@@ -11,4 +11,11 @@ def create_app(config_name):
     
     api = Api(app, api_spec_url='/api/spec', title='to_do_list', api_version='0.1', catch_all_404s=True)
     
+    
+    from .api.user.user import User
+    
+    api.add_resource(User, '/user')
+    
+    
+    
     return app
