@@ -6,6 +6,12 @@ post_parser = reqparse.RequestParser()
 post_parser.add_argument('u_id', type=str, required=True , location='form')
 post_parser.add_argument('u_pw', type=str, required=True , location='form')
 
+put_parser = reqparse.RequestParser()
+put_parser.add_argument('u_id', type=str, required=True, location='form')
+put_parser.add_argument('u_pw', type=str, required=True, location='form')
+put_parser.add_argument('name', type=str, required=True, location='form')
+put_parser.add_argument('nickname', type=str, required=True, location='form')
+
 class User(Resource):
     
     @swagger.doc({
@@ -70,7 +76,34 @@ class User(Resource):
         'tags' : ['user'],
         'description' : '회원가입 기능',
         'parameters' : [
-            
+            {
+                'name' : 'u_id',
+                'description' : '사용할 아이디',
+                'in' : 'formData',
+                'type' : 'string',
+                'required' : True,
+            },
+            {
+                'name' : 'u_pw',
+                'description' : '사용할 비밀번호',
+                'in' : 'formData',
+                'type' : 'string',
+                'required' : True,
+            },
+            {
+                'name' : 'name',
+                'description' : '이름',
+                'in' : 'formData',
+                'type' : 'string',
+                'required' : True,
+            },
+            {
+                'name' : 'nickname',
+                'description' : '사용할 닉네임',
+                'in' : 'formData',
+                'type' : 'string',
+                'required' : True,
+            },
         ],
         'responses' : {
             '200' : {
@@ -83,6 +116,10 @@ class User(Resource):
     })
     def put(self):
         """회원가입을 합니다."""
+        
+        args = put_parser.parse_args()
+        print(f"아이디 : {args['u_id']}")
+        
         return {
             'code' : 200,
             'message' : '임시-회원가입기능'
