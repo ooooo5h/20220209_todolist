@@ -2,6 +2,8 @@
 from flask_restful import Resource, reqparse
 from flask_restful_swagger_2 import swagger
 
+from server.model import Users
+
 post_parser = reqparse.RequestParser()
 post_parser.add_argument('u_id', type=str, required=True , location='form')
 post_parser.add_argument('u_pw', type=str, required=True , location='form')
@@ -65,11 +67,17 @@ class User(Resource):
         }
     })     
     def post(self):
-        """로그인을 시도합니다."""      
+        """로그인을 시도합니다."""    
+        
+        
+        args = post_parser.parse_args()
+        
+        login_user = Users.query.filter(Users.u_id == args['u_id']).filter(Users.u_pw == args['u_pw']).first()
+        print('로그인 유저 : ', login_user)
           
         return {
             'code' : 200,
-            'message' : '임시-로그인기능'
+            'message' : '로그인 성공'
         }
 
     @swagger.doc({
