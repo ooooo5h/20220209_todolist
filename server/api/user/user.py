@@ -20,6 +20,7 @@ class User(Resource):
         }
     })
     def get(self):
+        """사용자의 정보를 조회합니다."""
         return {
             'code' : 200,
             'message' : '임시-사용자정보조회'
@@ -41,6 +42,7 @@ class User(Resource):
         }
     })     
     def post(self):
+        """로그인을 시도합니다."""
         return {
             'code' : 200,
             'message' : '임시-로그인기능'
@@ -62,6 +64,7 @@ class User(Resource):
         }
     })
     def put(self):
+        """회원가입을 합니다."""
         return {
             'code' : 200,
             'message' : '임시-회원가입기능'

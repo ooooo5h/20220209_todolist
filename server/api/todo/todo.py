@@ -19,6 +19,7 @@ class Todo(Resource):
         }
     })
     def get(self):
+        """to do list를 생성합니다."""
         return {
             '임시' : '임시 투두 겟'
         }
