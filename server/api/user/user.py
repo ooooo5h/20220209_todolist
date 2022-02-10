@@ -77,7 +77,10 @@ class User(Resource):
         if login_user:            
             return {
                 'code' : 200,
-                'message' : '로그인 성공'
+                'message' : '로그인 성공',
+                'data' : {
+                    'user' : login_user.get_data_object(),
+                }
             }
         else : 
             return {

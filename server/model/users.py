@@ -7,7 +7,19 @@ class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     u_id = db.Column(db.String(20), nullable=False)
     u_pw = db.Column(db.String(20), nullable=False)
-    # name = db.Column(db.String(20), nullable=False)
-    # nickname = db.Column(db.String(20), nullable=False)
-    # created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
+    name = db.Column(db.String(20), nullable=False)
+    nickname = db.Column(db.String(20), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
     # retired_at = db.Column(db.DateTime)
+    
+    def get_data_object(self):
+        data = {
+            'id' : self.id,
+            'u_id' : self.u_id,
+            'name' : self.name,
+            'nickname' : self.nickname,
+            'created_at' : str(self.created_at),
+            # 'retired_at' : str(self.retired_at),
+        }
+        
+        return data
