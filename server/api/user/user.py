@@ -1,6 +1,10 @@
 # 사용자 정보와 관련된 기능들을 모아두는 모듈
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from flask_restful_swagger_2 import swagger
+
+post_parser = reqparse.RequestParser()
+post_parser.add_argument('u_id', type=str, required=True , location='form')
+post_parser.add_argument('u_pw', type=str, required=True , location='form')
 
 class User(Resource):
     
