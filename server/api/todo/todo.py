@@ -6,11 +6,11 @@ from server import db
 
 from server.model import Todos
 
-put_parser = reqparse.RequestParser()
-put_parser.add_argument('user_id', type=int, required=True, location='form')
-put_parser.add_argument('title', type=str, required=True, location='form')
-put_parser.add_argument('content', type=str, required=True, location='form')
-put_parser.add_argument('duedate', type=str, required=True, location='form')
+post_parser = reqparse.RequestParser()
+post_parser.add_argument('user_id', type=int, required=True, location='form')
+post_parser.add_argument('title', type=str, required=True, location='form')
+post_parser.add_argument('content', type=str, required=True, location='form')
+post_parser.add_argument('duedate', type=str, required=True, location='form')
 
 
 class Todo(Resource):
@@ -58,11 +58,11 @@ class Todo(Resource):
             },    
         }
     })
-    def put(self):
+    def post(self):
         """to do list를 생성합니다."""
         
         # # 존재하는 사용자일 때 처리하기
-        args = put_parser.parse_args()
+        args = post_parser.parse_args()
         exist_user = Users.query.filter(Users.id == args['user_id']).first()
         
         if not exist_user:
