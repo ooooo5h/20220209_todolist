@@ -12,9 +12,9 @@ class Users(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
     signout_at = db.Column(db.DateTime)
     
-    # my_toto = db.relationship('Todos')
+    my_toto = db.relationship('Todos')
     
-    def get_data_object(self):
+    def get_data_object(self, need_todos):
         data = {
             'id' : self.id,
             'u_id' : self.u_id,
@@ -24,8 +24,7 @@ class Users(db.Model):
             'signout_at' : str(self.signout_at) if self.signout_at else None, # "None"이 아닌 null로 나가게끔 => 그렇게 해야 프론트에서 쓸 떄 에러안나고 쓰기 좋음 
         }
         
-        # if need_todos:
-        #     data['my_totos'] = [mine.get_data_object() for mine in self.my_toto]
-        
+        if need_todos:
+            data['my_totos'] = [mine.get_data_object() for mine in self.my_toto]
         
         return data

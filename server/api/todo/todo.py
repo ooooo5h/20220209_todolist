@@ -268,20 +268,18 @@ class Todo(Resource):
             }, 400
         
         #  본인이 작성한 투두리스트 전체 목록 조회하기
-        exist_user = Todos.query.filter(Todos.user_id == args['user_id']).all()
+        exist_todo = Todos.query.filter(Todos.user_id == args['user_id']).all()
         
-        if not exist_user:
+        if not exist_todo:
             return {
                 'code' : 400,
                 'message' : f"{args['user_id']}번 사용자가 작성한 투두 리스트는 없습니다."
             }, 400
         
-        todo_list  = [my_todo.get_data_object() for my_todo in exist_user]
-        
         return {
             'code' : 200,
             'message' : 'to do list 조회 성공',
             'data' : {
-                'todos' : todo_list,
+                'user' : exist_user.get_data_object(need_todos=True),
             }
         }
