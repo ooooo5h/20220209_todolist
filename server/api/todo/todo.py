@@ -82,5 +82,8 @@ class Todo(Resource):
         
         return {
             'code' : '200',
-            'message' : 'to do list 생성완료'
+            'message' : 'to do list 생성완료',
+            'data' : {
+                'feed' : create_todo.get_data_object(),
+            }
         }
