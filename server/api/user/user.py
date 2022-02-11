@@ -281,7 +281,40 @@ class User(Resource):
     })    
     def patch(self):
         """회원 정보 수정"""
+        
+        args = patch_parser.parse_args()
+        
+        exist_user = Users.query.filter(Users.id == args['id']).first()
+        
+        if exist_user is None:
+            return {
+                'code' : 400,
+                'message' : '존재하지 않는 사용자번호입니다.'
+            }, 400
+        
+        if args['field'] == 'u_pw':
+            exist_user.u_pw = args['value']
+            
+            db.session.add(exist_user)
+            db.session.commit()
+            
+            return {
+                'code' : 200,
+                'message' : '비밀번호 변경 성공'
+            }            
+        
+        elif args['field'] == 'nickname':
+            exist_user.nickname = args['value']
+            
+            db.session.add(exist_user)
+            db.session.commit()
+    
+            return {
+                'code' : 200,
+                'message' : '닉네임 변경 성공'
+            }  
+    
         return {
-            'code' : 200,
-            'message' : '회원정보 수정 임시'
-        }
+            'code' : 400,
+            'message' : '회원정보 수정 실패'
+        }, 400
