@@ -131,8 +131,58 @@ class Todo(Resource):
     def patch(self):
         """to do list를 수정합니다."""
         
-        return {
-            'code' : 200,
-            'message' : 'to do list 수정 완료'
-        }
+        args = patch_parser.parse_args()
+        
+        # 실존하는 to do list의 아이디인가?
+        exist_todo_id = Todos.query.filter(Todos.id == args['todo_id']).first()
+        
+        if not exist_todo_id:
+            return {
+                'code' : 400,
+                'message' : '존재하지 않는 to do list의 번호입니다.'
+            }, 400
+            
+        else :
+            # 수정하고자 하는 to do list의 번호가 있다면,
+            # 1. 제목 수정
+            if args['field'] == 'title':
+                exist_todo_id.title = args['value']
+                db.session.add(exist_todo_id)
+                db.session.commit()
+                
+                return {
+                    'code' : 200,
+                    'message' : '제목 수정 완료'
+                }
+            # 2. 내용 수정    
+            elif args['field'] == 'content':
+                exist_todo_id.content = args['value']
+                db.session.add(exist_todo_id)
+                db.session.commit()
+                
+                return {
+                    'code' : 200,
+                    'message' : '내용 수정 완료'
+                }
+            # 3. 마감일자 수정    
+            elif args['field'] == 'duedata':
+                exist_todo_id.duedata = db.func.date((args['value']))
+                db.session.add(exist_todo_id)
+                db.session.commit()
+                
+                return {
+                    'code' : 200,
+                    'message' : '마감일자 수정 완료'
+                }
+            # 4. 완료여부 수정    
+            if args['field'] == 'is_completed':
+                exist_todo_id.is_completed = int(args['value'])
+                db.session.add(exist_todo_id)
+                db.session.commit()
+                
+                return {
+                    'code' : 200,
+                    'message' : '완료여부 수정 완료'
+                }
+
         
