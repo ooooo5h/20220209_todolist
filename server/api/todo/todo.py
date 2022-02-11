@@ -17,6 +17,9 @@ patch_parser.add_argument('todo_id', type=int, required=True, location='form')
 patch_parser.add_argument('field', type=str, required=True, location='form')
 patch_parser.add_argument('value', type=str, required=True, location='form')
 
+delete_parser = reqparse.RequestParser()
+delete_parser.add_argument('todo_id', type=int, required=True, location='args')
+
 class Todo(Resource):
     
     @swagger.doc({
@@ -185,4 +188,45 @@ class Todo(Resource):
                     'message' : '완료여부 수정 완료'
                 }
 
+    @swagger.doc({
+        'tags' : ['todo'],
+        'description' : 'to do list 삭제하기',
+        'parameters' : [
+            {
+                'name' : 'todo_id',
+                'description' : '삭제할 to do 의 번호',
+                'in' : 'query',
+                'type' : 'integer',
+                'required' : True,
+            }
+        ],
+        'responses' : {
+            '200' : {
+                'description' : '삭제 성공'
+            },
+            '400' : {
+                'description' : '삭제 실패'
+            }
+        }
+    })
+    def delete(self):
+        """to do list 삭제하기"""
+        
+        args = delete_parser.parse_args()
+        
+        # 실존하는 to do  번호인가
+        exist_todo_id = Todos.query.filter(Todos.id == args['todo_id']).first()
+        if not exist_todo_id:
+            return {
+                'code' : 400,
+                'message' : '존재하지 않는 to do 의 번호입니다.'
+            }, 400
+        
+        db.session.delete(exist_todo_id)
+        db.session.commit()
+        
+        return {
+            'code' : 200,
+            'message' : 'to do list 삭제 성공'
+        }
         
