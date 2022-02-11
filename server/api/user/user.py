@@ -20,6 +20,11 @@ put_parser.add_argument('nickname', type=str, required=True, location='form')
 delete_parser = reqparse.RequestParser()
 delete_parser.add_argument('id', type=int, required=True, location='args')
 
+patch_parser = reqparse.RequestParser()
+patch_parser.add_argument('id', type=int, required=True, location='form')
+patch_parser.add_argument('field', type=str, required=True, location='form')
+patch_parser.add_argument('value', type=str, required=True, location='form')
+
 class User(Resource):
     
     # @swagger.doc({
@@ -236,4 +241,47 @@ class User(Resource):
         return {
             'code' : '200',
             'message' : '회원 삭제 성공',
+        }
+    
+    @swagger.doc({
+        'tags' : ['user'],
+        'description' : '회원 정보 수정',
+        'parameters' : [
+            {
+                'name' : 'id',
+                'description' : '몇 번 사용자의 정보를 수정할건지?',
+                'in' : 'formData',
+                'type' : 'integer',
+                'required' : True,
+            },
+            {
+                'name' : 'field',
+                'description' : '변경하고 싶은 값',
+                'in' : 'formData',
+                'type' : 'string',
+                'enum' : ['u_pw', 'nickname'],
+                'required' : True,
+            },
+            {
+                'name' : 'value',
+                'description' : '변경하고 싶은 값',
+                'in' : 'formData',
+                'type' : 'string',
+                'required' : True,
+            },
+        ],
+        'responses' : {
+            '200' : {
+                'description' : '회원 정보 수정 성공'
+            },
+            '400' : {
+                'description' : '회원 정보 수정 실패'
+            },
+        }
+    })    
+    def patch(self):
+        """회원 정보 수정"""
+        return {
+            'code' : 200,
+            'message' : '회원정보 수정 임시'
         }
