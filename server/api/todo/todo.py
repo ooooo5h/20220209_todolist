@@ -165,8 +165,8 @@ class Todo(Resource):
                     'message' : '내용 수정 완료'
                 }
             # 3. 마감일자 수정    
-            elif args['field'] == 'duedata':
-                exist_todo_id.duedata = db.func.date((args['value']))
+            elif args['field'] == 'duedate':
+                exist_todo_id.duedate = args['value']
                 db.session.add(exist_todo_id)
                 db.session.commit()
                 
