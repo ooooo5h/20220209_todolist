@@ -15,6 +15,9 @@ put_parser.add_argument('u_pw', type=str, required=True, location='form')
 put_parser.add_argument('name', type=str, required=True, location='form')
 put_parser.add_argument('nickname', type=str, required=True, location='form')
 
+delete_parser = reqparse.RequestParser()
+delete_parser.add_argument('id', type=int, required=True, location='query')
+
 class User(Resource):
     
     # @swagger.doc({
@@ -182,4 +185,33 @@ class User(Resource):
             'data' : {
                 'user' : new_user.get_data_object()
             }
+        }
+    
+    @swagger.doc({
+        'tags' : ['user'],
+        'description' : '회원 삭제',
+        'parameters' : [
+            {
+                'name' : 'id',
+                'description' : '삭제할 사용자의 몇번',
+                'in' : 'query',
+                'type' : 'integer',
+                'required' : True
+            }
+        ],
+        'responses' : {
+            '200' : {
+                'description' : '삭제 성공',
+            },
+            '400' : {
+                'description' : '삭제 실패',
+            }
+        }
+    })
+    def delete(self):
+        """회원 삭제"""
+        
+        return {
+            'code' : '임시',
+            'message' : '회원 삭제 성공',
         }
