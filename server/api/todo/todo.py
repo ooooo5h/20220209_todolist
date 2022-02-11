@@ -1,6 +1,9 @@
 from flask_restful import Resource, reqparse
 from flask_restful_swagger_2 import swagger
 
+from server.model.users import Users
+from server import db
+
 put_parser = reqparse.RequestParser()
 put_parser.add_argument('user_id', type=int, required=True, location='form')
 put_parser.add_argument('title', type=str, required=True, location='form')
@@ -56,6 +59,22 @@ class Todo(Resource):
     def put(self):
         """to do list를 생성합니다."""
         
+        # # 존재하는 사용자일 때 처리하기
+        args = put_parser.parse_args()
+        exist_user = Users.query.filter(Users.id == args['user_id']).first()
+        
+        if not exist_user:
+            return {
+                'code' : 400,
+                'message' : '존재하지 않는 사용자의 번호입니다.'
+            }, 400
+        
+        
+        # DB에 저장해주는 코드 작성해야함
+        
+        
+        
         return {
-            '임시' : '임시 투두 겟'
+            'code' : '200',
+            'message' : '임시:생성완료'
         }
