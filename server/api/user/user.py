@@ -5,6 +5,8 @@ from flask_restful_swagger_2 import swagger
 from server.model import Users
 from server import db
 
+import datetime
+
 post_parser = reqparse.RequestParser()
 post_parser.add_argument('u_id', type=str, required=True , location='form')
 post_parser.add_argument('u_pw', type=str, required=True , location='form')
@@ -222,7 +224,13 @@ class User(Resource):
                 'message' : '존재하지 않는 회원의 번호입니다.'
             }, 400   
         
-        db.session.delete(exist_user)
+        exist_user.u_id = '삭제'
+        exist_user.u_pw = '삭제'
+        exist_user.name = '삭제'
+        exist_user.nickname = '삭제'
+        exist_user.signout_at = datetime.datetime.utcnow()
+        
+        db.session.add(exist_user)
         db.session.commit()
         
         return {
