@@ -71,31 +71,32 @@ class User(Resource):
         """로그인을 시도합니다."""    
         
         args = post_parser.parse_args()
-        login_user = Users.query
         
-        # 아이디가 틀렸습니다
-        login_user_id = login_user.filter(Users.u_id == args['u_id']).first()
+        # 입력한 id와 DB에 저장된 아이디가 같은 지 쿼리를 날려서 하나만 찾아와라
+        login_user_id = Users.query.filter(Users.u_id == args['u_id']).first()
+        
         if login_user_id is None :
+            # 일치하는 ID가 없음
             return {
                 'code' : 400,
                 'message' : '아이디가 틀렸습니다.'
             }, 400
         
-        # 비밀번호가 틀렸습니다
-        login_user_pw = login_user.filter(Users.u_pw == args['u_pw']).first()
-        if login_user_pw is None :
+        if login_user_id.u_pw == args['u_pw'] :
+            # 일차하는 ID가 있고, 그 유저 정보의 PW와 입력한 PW가 일치하는 경우
+            return {
+                'code' : 200,
+                'message' : '로그인 성공',
+                'data' : {
+                    'user' : login_user_id.get_data_object(),
+                }
+            }
+        else : 
+            # 아이디는 맞지만, 비밀번호가 틀린 경우
             return {
                 'code' : 400,
                 'message' : '비밀번호가 틀렸습니다.'
             }, 400
-        
-        return {
-            'code' : 200,
-            'message' : '로그인 성공',
-            'data' : {
-                'user' : login_user.get_data_object(),
-            }
-        }
 
 
     @swagger.doc({
