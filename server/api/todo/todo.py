@@ -1,10 +1,9 @@
 from flask_restful import Resource, reqparse
 from flask_restful_swagger_2 import swagger
 
-from server.model.users import Users
 from server import db
-
 from server.model import Todos
+from server.model import Users
 
 post_parser = reqparse.RequestParser()
 post_parser.add_argument('user_id', type=int, required=True, location='form')
@@ -19,6 +18,9 @@ patch_parser.add_argument('value', type=str, required=True, location='form')
 
 delete_parser = reqparse.RequestParser()
 delete_parser.add_argument('todo_id', type=int, required=True, location='args')
+
+get_parser = reqparse.RequestParser()
+get_parser.add_argument('user_id', type=int, required=True, location='args')
 
 class Todo(Resource):
     
@@ -254,7 +256,32 @@ class Todo(Resource):
     def get(self):
         """to do list 조회하기"""
         
+        args = get_parser.parse_args()
+        
+        # 실제 있는 사용자의 번호일때만,
+        exist_user = Users.query.filter(Users.id == args['user_id']).first()
+        
+        if not exist_user:
+            return {
+                'code' : 400,
+                'message' : '사용자의 번호가 존재하지않습니다.'
+            }, 400
+        
+        #  본인이 작성한 투두리스트 전체 목록 조회하기
+        exist_user = Todos.query.filter(Todos.user_id == args['user_id']).all()
+        
+        if not exist_user:
+            return {
+                'code' : 400,
+                'message' : f"{args['user_id']}번 사용자가 작성한 투두 리스트는 없습니다."
+            }, 400
+        
+        todo_list  = [my_todo.get_data_object() for my_todo in exist_user]
+        
         return {
             'code' : 200,
-            'message' : 'to do list 조회 성공'
+            'message' : 'to do list 조회 성공',
+            'data' : {
+                'todos' : todo_list,
+            }
         }

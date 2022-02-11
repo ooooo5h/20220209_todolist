@@ -19,7 +19,7 @@ class Todos(db.Model):
             'title' : self.title,
             'content' : self.content,
             'created_at' : str(self.created_at),
-            'duedate' : self.duedate,
+            'duedate' : str(self.duedate),
             'is_completed' : self.is_completed,
         }
         
