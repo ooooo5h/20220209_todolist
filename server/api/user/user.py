@@ -170,4 +170,7 @@ class User(Resource):
         return {
             'code' : 200,
             'message' : f"{args['name']}님, 회원가입에 성공하셨습니다.",
+            'data' : {
+                'user' : new_user.get_data_object()
+            }
         }
