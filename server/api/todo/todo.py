@@ -40,7 +40,7 @@ class Todo(Resource):
                 'description' : '데드라인 날짜',
                 'in' : 'formData',
                 'type' : 'string',
-                'format' : 'date',
+                # 'format' : 'date',
                 'required' : True,
             },
         ],
