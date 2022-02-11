@@ -12,6 +12,10 @@ post_parser.add_argument('title', type=str, required=True, location='form')
 post_parser.add_argument('content', type=str, required=True, location='form')
 post_parser.add_argument('duedate', type=str, required=True, location='form')
 
+patch_parser = reqparse.RequestParser()
+patch_parser.add_argument('todo_id', type=int, required=True, location='form')
+patch_parser.add_argument('field', type=str, required=True, location='form')
+patch_parser.add_argument('value', type=str, required=True, location='form')
 
 class Todo(Resource):
     
@@ -87,3 +91,48 @@ class Todo(Resource):
                 'feed' : create_todo.get_data_object(),
             }
         }
+    
+    @swagger.doc({
+        'tags' : ['todo'],
+        'description' : 'to do list 수정하기',
+        'parameters' : [
+            {
+                'name' : 'todo_id',
+                'description' : '수정하고자 하는 to do list의 번호',
+                'in' : 'formData',
+                'type' : 'integer',
+                'required' : True,
+            },
+            {
+                'name' : 'field',
+                'description' : '수정하고 싶은 항목',
+                'in' : 'formData',
+                'type' : 'string',
+                'enum' : ['title', 'content', 'duedate', 'is_completed'],
+                'required' : True,
+            },
+            {
+                'name' : 'value',
+                'description' : '수정할 값',
+                'in' : 'formData',
+                'type' : 'string',
+                'required' : True,
+            },
+        ],
+        'responses' : {
+            '200' : {
+                'description' : 'to do list 수정 성공'
+            },
+            '400' : {
+                'description' : 'to do list 수정 실패'
+            }
+        }
+    })    
+    def patch(self):
+        """to do list를 수정합니다."""
+        
+        return {
+            'code' : 200,
+            'message' : 'to do list 수정 완료'
+        }
+        
