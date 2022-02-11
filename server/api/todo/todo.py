@@ -230,3 +230,31 @@ class Todo(Resource):
             'message' : 'to do list 삭제 성공'
         }
         
+    @swagger.doc({
+        'tags' : ['todo'],
+        'description' : '사용자의 to do list 조회하기',
+        'parameters' : [
+            {
+                'name' : 'user_id',
+                'description' : '사용자 번호 입력',
+                'in' : 'query',
+                'type' : 'integer',
+                'required' : True,
+            }
+        ],
+        'responses' : {
+            '200' : {
+                'description' : '조회 성공'
+            },
+            '400' : {
+                'description' : '조회 실패'
+            }
+        }
+    })    
+    def get(self):
+        """to do list 조회하기"""
+        
+        return {
+            'code' : 200,
+            'message' : 'to do list 조회 성공'
+        }
