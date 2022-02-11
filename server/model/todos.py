@@ -9,7 +9,7 @@ class Todos(db.Model):
     title = db.Column(db.String(20), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
-    duedate = db.Column(db.String(10), nullable=False)
+    duedate = db.Column(db.Date, nullable=False)
     is_completed = db.Column(db.Boolean, nullable=False, default=False)
     
     def get_data_object(self):
