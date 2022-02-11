@@ -70,25 +70,33 @@ class User(Resource):
     def post(self):
         """로그인을 시도합니다."""    
         
-        
         args = post_parser.parse_args()
+        login_user = Users.query
         
-        login_user = Users.query.filter(Users.u_id == args['u_id']).filter(Users.u_pw == args['u_pw']).first()
-          
-        if login_user:            
-            return {
-                'code' : 200,
-                'message' : '로그인 성공',
-                'data' : {
-                    'user' : login_user.get_data_object(),
-                }
-            }
-        else : 
+        # 아이디가 틀렸습니다
+        login_user_id = login_user.filter(Users.u_id == args['u_id']).first()
+        if login_user_id is None :
             return {
                 'code' : 400,
-                'message' : '로그인에 실패했습니다.'
+                'message' : '아이디가 틀렸습니다.'
             }, 400
-            
+        
+        # 비밀번호가 틀렸습니다
+        login_user_pw = login_user.filter(Users.u_pw == args['u_pw']).first()
+        if login_user_pw is None :
+            return {
+                'code' : 400,
+                'message' : '비밀번호가 틀렸습니다.'
+            }, 400
+        
+        return {
+            'code' : 200,
+            'message' : '로그인 성공',
+            'data' : {
+                'user' : login_user.get_data_object(),
+            }
+        }
+
 
     @swagger.doc({
         'tags' : ['user'],
