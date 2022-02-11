@@ -164,7 +164,7 @@ class User(Resource):
             return {
                 'code' : 400,
                 'message' : f"{args['nickname']}은/는 이미 사용중인 닉네임입니다."
-            }
+            }, 400
         
         # 조건 충족했으면 DB에 저장
         new_user = Users()
