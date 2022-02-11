@@ -3,6 +3,7 @@ from flask_restful import Resource, reqparse
 from flask_restful_swagger_2 import swagger
 
 from server.model import Users
+from server import db
 
 post_parser = reqparse.RequestParser()
 post_parser.add_argument('u_id', type=str, required=True , location='form')
@@ -135,9 +136,38 @@ class User(Resource):
         """회원가입을 합니다."""
         
         args = put_parser.parse_args()
-        print(f"아이디 : {args['u_id']}")
         
+        user_sign_in = Users.query
+        
+        # 중복된 아이디 사용 불가        
+        exist_u_id = user_sign_in.filter(Users.u_id == args['u_id']).first()
+        
+        if exist_u_id:
+            return {
+                'code' : 400,
+                'message' : f"{args['u_id']}은/는 이미 사용중인 아이디입니다."
+            }, 400
+        
+        # 중복된 닉네임 사용 불가    
+        exist_nickname = user_sign_in.filter(Users.nickname == args['nickname']).first()
+        
+        if exist_nickname:
+            return {
+                'code' : 400,
+                'message' : f"{args['nickname']}은/는 이미 사용중인 닉네임입니다."
+            }
+        
+        # 조건 충족했으면 DB에 저장
+        new_user = Users()
+        new_user.u_id = args['u_id']
+        new_user.u_pw = args['u_pw']
+        new_user.name = args['name']
+        new_user.nickname = args['nickname']
+        
+        db.session.add(new_user)
+        db.session.commit()
+               
         return {
             'code' : 200,
-            'message' : '임시-회원가입기능'
+            'message' : f"{args['name']}님, 회원가입에 성공하셨습니다.",
         }
