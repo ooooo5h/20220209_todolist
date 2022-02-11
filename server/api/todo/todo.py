@@ -4,6 +4,8 @@ from flask_restful_swagger_2 import swagger
 from server.model.users import Users
 from server import db
 
+from server.model import Todos
+
 put_parser = reqparse.RequestParser()
 put_parser.add_argument('user_id', type=int, required=True, location='form')
 put_parser.add_argument('title', type=str, required=True, location='form')
@@ -69,12 +71,16 @@ class Todo(Resource):
                 'message' : '존재하지 않는 사용자의 번호입니다.'
             }, 400
         
+        create_todo = Todos()
+        create_todo.user_id = args['user_id']
+        create_todo.title = args['title']
+        create_todo.content = args['content']
+        create_todo.duedate = args['duedate']
         
-        # DB에 저장해주는 코드 작성해야함
-        
-        
+        db.session.add(create_todo)
+        db.session.commit()       
         
         return {
             'code' : '200',
-            'message' : '임시:생성완료'
+            'message' : 'to do list 생성완료'
         }
