@@ -16,7 +16,7 @@ put_parser.add_argument('name', type=str, required=True, location='form')
 put_parser.add_argument('nickname', type=str, required=True, location='form')
 
 delete_parser = reqparse.RequestParser()
-delete_parser.add_argument('id', type=int, required=True, location='query')
+delete_parser.add_argument('id', type=int, required=True, location='args')
 
 class User(Resource):
     
@@ -193,7 +193,7 @@ class User(Resource):
         'parameters' : [
             {
                 'name' : 'id',
-                'description' : '삭제할 사용자의 몇번',
+                'description' : '삭제할 사용자의 번호',
                 'in' : 'query',
                 'type' : 'integer',
                 'required' : True
@@ -211,7 +211,21 @@ class User(Resource):
     def delete(self):
         """회원 삭제"""
         
+        args = delete_parser.parse_args()
+        
+        # 실제 존재하는 회원 번호인가
+        exist_user = Users.query.filter(Users.id == args['id']).first()
+        
+        if not exist_user :
+            return {
+                'code' : 400,
+                'message' : '존재하지 않는 회원의 번호입니다.'
+            }, 400   
+        
+        db.session.delete(exist_user)
+        db.session.commit()
+        
         return {
-            'code' : '임시',
+            'code' : '200',
             'message' : '회원 삭제 성공',
         }
