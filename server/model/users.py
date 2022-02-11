@@ -19,7 +19,7 @@ class Users(db.Model):
             'name' : self.name,
             'nickname' : self.nickname,
             'created_at' : str(self.created_at),
-            'signout_at' : str(self.signout_at) if self.signout_at else None,
+            'signout_at' : str(self.signout_at) if self.signout_at else None, # "None"이 아닌 null로 나가게끔 => 그렇게 해야 프론트에서 쓸 떄 에러안나고 쓰기 좋음 
         }
         
         return data
