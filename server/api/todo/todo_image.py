@@ -5,6 +5,7 @@ from werkzeug.datastructures import FileStorage
 from flask import current_app
 import boto3
 import time
+import os
 
 from server.model import Users
 
@@ -60,11 +61,11 @@ class TodoImage(Resource):
             
             new_file_name = f"TODOLIST_{user_nickname}_{now}"
             
+            # 원래 올라온 파일명을 파일이름과 확장자로 분리하여 확장자만 추출
+            _, file_extension = os.path.splitext(file.filename)
+            new_file_name = f"{new_file_name}{file_extension}"
     
-            
-            # 파일에는 파일이름과 본문이 있음
-            file_name = file.filename
-            s3_file_path = f'images/todo_imgs/{file_name}' # 파일 이름은 올라갈 경로를 생성할 때 활용
+            s3_file_path = f'images/todo_imgs/{new_file_name}' # 파일 이름은 올라갈 경로를 생성할 때 활용
             
             # 본문은 실제로 올려줄 파일에 해당됨
             file_body = file.stream.read()
