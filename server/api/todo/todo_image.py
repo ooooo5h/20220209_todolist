@@ -8,7 +8,7 @@ import time
 import os
 import hashlib
 
-from server.model import Users
+from server.model import Users, Todos
 
 put_parser = reqparse.RequestParser()
 put_parser.add_argument('image_file', type=FileStorage, required=True, location='files', action='append')
@@ -49,6 +49,14 @@ class TodoImage(Resource):
         
         args = put_parser.parse_args()
         
+        exist_todo_id = Todos.query.filter(Todos.id == args['todo_id']).first()
+        
+        if not exist_todo_id:
+            return {
+                'code' : 400,
+                'message' : '존재하지 않는 to do의 id입니다.'
+            }, 400
+        
         aws_s3 = boto3.resource('s3',\
             aws_access_key_id = current_app.config['AWS_ACCESS_KEY_ID'],\
             aws_secret_access_key=current_app.config['AWS_SECRET_ACCESS_KEY'])
@@ -57,10 +65,10 @@ class TodoImage(Resource):
             
             # 파일이름을 첨부한 이름 그대로 사용하면, 중복 발생의 소지가 있어서 '누가_언제'올렸는지로 재가공하고 확장자는 그대로 가져다 사용한다
             # 먼저 파일 이름 재가공은 아래처럼 실시
-            user_nickname = 'test' 
+            todo_name = exist_todo_id.title
             now = round(time.time()*10000) # 중복을 피하기 위한 요소로, 현재 시간을 간단한 숫자값으로 표현하자
             
-            new_file_name = f"TODOLIST_{hashlib.md5(user_nickname.encode('utf8')).hexdigest()}_{now}"
+            new_file_name = f"TODOLIST_{hashlib.md5(todo_name.encode('utf8')).hexdigest()}_{now}"
             
             # 원래 올라온 파일명을 파일이름과 확장자로 분리하여 확장자만 추출
             _, file_extension = os.path.splitext(file.filename)
@@ -79,5 +87,9 @@ class TodoImage(Resource):
             
         
         return {
-            'code' : 'to do 이미지 등록하는 기능' 
+            'code' : '200',
+            'message' : 'to do의 이미지 첨부 성공',
+            'data' : {
+                'todo' : exist_todo_id.get_data_object()
+            }
         }
