@@ -4,6 +4,9 @@ from flask_restful_swagger_2 import swagger
 from werkzeug.datastructures import FileStorage
 from flask import current_app
 import boto3
+import time
+
+from server.model import Users
 
 put_parser = reqparse.RequestParser()
 put_parser.add_argument('image_file', type=FileStorage, required=True, location='files', action='append')
@@ -49,6 +52,15 @@ class TodoImage(Resource):
             aws_secret_access_key=current_app.config['AWS_SECRET_ACCESS_KEY'])
         
         for file in args['image_file']:
+            
+            # 파일이름을 첨부한 이름 그대로 사용하면, 중복 발생의 소지가 있어서 '누가_언제'올렸는지로 재가공하고 확장자는 그대로 가져다 사용한다
+            # 먼저 파일 이름 재가공은 아래처럼 실시
+            user_nickname = 'test' 
+            now = round(time.time()*10000) # 중복을 피하기 위한 요소로, 현재 시간을 간단한 숫자값으로 표현하자
+            
+            new_file_name = f"TODOLIST_{user_nickname}_{now}"
+            
+    
             
             # 파일에는 파일이름과 본문이 있음
             file_name = file.filename
