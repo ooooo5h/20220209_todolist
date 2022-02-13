@@ -8,6 +8,7 @@ class Todos(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     title = db.Column(db.String(20), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    image_url = db.Column(db.String(200))
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
     duedate = db.Column(db.Date, nullable=False)
     is_completed = db.Column(db.Boolean, nullable=False, default=False)
@@ -20,6 +21,7 @@ class Todos(db.Model):
             'user_id' : self.user_id,
             'title' : self.title,
             'content' : self.content,
+            'image_url' : self.image_url,
             'created_at' : str(self.created_at),
             'duedate' : str(self.duedate),
             'is_completed' : self.is_completed,
