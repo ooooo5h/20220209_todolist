@@ -8,7 +8,8 @@ import time
 import os
 import hashlib
 
-from server.model import Users, Todos
+from server import db
+from server.model import Todos
 
 put_parser = reqparse.RequestParser()
 put_parser.add_argument('image_file', type=FileStorage, required=True, location='files', action='append')
@@ -85,6 +86,10 @@ class TodoImage(Resource):
             # ACL을 퍼블릭 허용으로 설정해줘야함
             aws_s3.ObjectAcl(current_app.config['AWS_S3_BUCKET_NAME'], s3_file_path).put(ACL='public-read')
             
+            # TO DO 이미지 경로를 S3_FILE_PATH로 저장하기
+            exist_todo_id.image_url = s3_file_path
+            db.session.add(exist_todo_id)
+            db.session.commit()
         
         return {
             'code' : '200',
