@@ -2,6 +2,8 @@ from flask_restful import Resource, reqparse
 from flask_restful_swagger_2 import swagger
 
 from werkzeug.datastructures import FileStorage
+from flask import current_app
+import boto3
 
 put_parser = reqparse.RequestParser()
 put_parser.add_argument('image', type=FileStorage, required=True, location='files', action='append')
@@ -39,6 +41,13 @@ class TodoImage(Resource):
     })
     def put(self):
         """to do 이미지 등록하는 기능"""
+        
+        args = put_parser.parse_args()
+        
+        aws_s3 = boto3.resource('s3',\
+            aws_access_key= current_app.config['AAWS_ACCESS_KEY_ID'],\
+            aws_secret_access_key=current_app.config['AAWS_SECRET_ACCESS_KEY'])
+        
         return {
             'code' : 'to do 이미지 등록하는 기능' 
         }
