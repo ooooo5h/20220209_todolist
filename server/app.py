@@ -23,10 +23,12 @@ def create_app(config_name):
     from server.api.user import User
     from server.api.todo import Todo
     from server.api.todo import TodoDetail
+    from server.api.todo import TodoImage
     
     api.add_resource(User, '/user')
     api.add_resource(Todo, '/todo')
     api.add_resource(TodoDetail, '/todo/<int:todo_id>')
+    api.add_resource(TodoImage, '/todoimage')
     
     
     # swagger문서를 자동으로 생성하기
