@@ -6,6 +6,7 @@ from flask import current_app
 import boto3
 import time
 import os
+import hashlib
 
 from server.model import Users
 
@@ -59,7 +60,7 @@ class TodoImage(Resource):
             user_nickname = 'test' 
             now = round(time.time()*10000) # 중복을 피하기 위한 요소로, 현재 시간을 간단한 숫자값으로 표현하자
             
-            new_file_name = f"TODOLIST_{user_nickname}_{now}"
+            new_file_name = f"TODOLIST_{hashlib.md5(user_nickname.encode('utf8')).hexdigest()}_{now}"
             
             # 원래 올라온 파일명을 파일이름과 확장자로 분리하여 확장자만 추출
             _, file_extension = os.path.splitext(file.filename)
