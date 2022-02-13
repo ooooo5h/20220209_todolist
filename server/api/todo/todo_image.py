@@ -6,7 +6,7 @@ from flask import current_app
 import boto3
 
 put_parser = reqparse.RequestParser()
-put_parser.add_argument('image', type=FileStorage, required=True, location='files', action='append')
+put_parser.add_argument('image_file', type=FileStorage, required=True, location='files', action='append')
 put_parser.add_argument('todo_id', type=int, required=True, location='form')
 
 class TodoImage(Resource):
@@ -23,7 +23,7 @@ class TodoImage(Resource):
                 'required' : True,
             },
             {
-                'name' : 'image',
+                'name' : 'image_file',
                 'description' : '실제로 첨부할 이미지 파일',
                 'in' : 'formData',
                 'type' : 'file',
@@ -45,8 +45,11 @@ class TodoImage(Resource):
         args = put_parser.parse_args()
         
         aws_s3 = boto3.resource('s3',\
-            aws_access_key= current_app.config['AAWS_ACCESS_KEY_ID'],\
-            aws_secret_access_key=current_app.config['AAWS_SECRET_ACCESS_KEY'])
+            aws_access_key_id = current_app.config['AWS_ACCESS_KEY_ID'],\
+            aws_secret_access_key=current_app.config['AWS_SECRET_ACCESS_KEY'])
+        
+        for file in args['image_file']:
+            print(file)
         
         return {
             'code' : 'to do 이미지 등록하는 기능' 
