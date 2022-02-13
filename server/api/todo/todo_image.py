@@ -54,7 +54,15 @@ class TodoImage(Resource):
             file_name = file.filename
             s3_file_path = f'images/todo_imgs/{file_name}' # 파일 이름은 올라갈 경로를 생성할 때 활용
             
+            # 본문은 실제로 올려줄 파일에 해당됨
             file_body = file.stream.read()
+            
+            # 어떤 버킷에 올려줄건지 버킷이름을 꺼내고, 저장해줄 이름과 파일을 put해줌
+            aws_s3.Bucket(current_app.config['AWS_S3_BUCKET_NAME']).put_object(Key=s3_file_path, Body=file_body)
+            
+            # ACL을 퍼블릭 허용으로 설정해줘야함
+            aws_s3.ObjectAcl(current_app.config['AWS_S3_BUCKET_NAME'], s3_file_path).put(ACL='public-read')
+            
         
         return {
             'code' : 'to do 이미지 등록하는 기능' 
