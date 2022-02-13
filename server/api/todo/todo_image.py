@@ -49,7 +49,12 @@ class TodoImage(Resource):
             aws_secret_access_key=current_app.config['AWS_SECRET_ACCESS_KEY'])
         
         for file in args['image_file']:
-            print(file)
+            
+            # 파일에는 파일이름과 본문이 있음
+            file_name = file.filename
+            s3_file_path = f'images/todo_imgs/{file_name}' # 파일 이름은 올라갈 경로를 생성할 때 활용
+            
+            file_body = file.stream.read()
         
         return {
             'code' : 'to do 이미지 등록하는 기능' 
