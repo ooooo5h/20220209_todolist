@@ -26,7 +26,7 @@ def create_app(config_name):
     
     api.add_resource(User, '/user')
     api.add_resource(Todo, '/todo')
-    api.add_resource(TodoDetail, '/tododetail/<int:todo_id>')
+    api.add_resource(TodoDetail, '/todo/<int:todo_id>')
     
     
     # swagger문서를 자동으로 생성하기
