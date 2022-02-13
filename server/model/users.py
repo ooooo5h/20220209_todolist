@@ -14,7 +14,7 @@ class Users(db.Model):
     
     my_toto = db.relationship('Todos')
     
-    def get_data_object(self, need_todos):
+    def get_data_object(self, need_todos=False):
         data = {
             'id' : self.id,
             'u_id' : self.u_id,

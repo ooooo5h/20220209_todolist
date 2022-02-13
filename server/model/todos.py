@@ -12,7 +12,9 @@ class Todos(db.Model):
     duedate = db.Column(db.Date, nullable=False)
     is_completed = db.Column(db.Boolean, nullable=False, default=False)
     
-    def get_data_object(self):
+    user = db.relationship('Users')
+    
+    def get_data_object(self, need_user_info=False):
         data = {
             'id' : self.id,
             'user_id' : self.user_id,
@@ -22,5 +24,8 @@ class Todos(db.Model):
             'duedate' : str(self.duedate),
             'is_completed' : self.is_completed,
         }
+        
+        if need_user_info:
+            data['user_info'] = self.user.get_data_object()
         
         return data

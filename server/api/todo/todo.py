@@ -19,9 +19,6 @@ patch_parser.add_argument('value', type=str, required=True, location='form')
 delete_parser = reqparse.RequestParser()
 delete_parser.add_argument('todo_id', type=int, required=True, location='args')
 
-get_parser = reqparse.RequestParser()
-get_parser.add_argument('user_id', type=int, required=True, location='args')
-
 class Todo(Resource):
     
     @swagger.doc({
@@ -234,15 +231,8 @@ class Todo(Resource):
         
     @swagger.doc({
         'tags' : ['todo'],
-        'description' : '사용자의 to do list 조회하기',
+        'description' : '모든 to do list 조회하기',
         'parameters' : [
-            {
-                'name' : 'user_id',
-                'description' : '사용자 번호 입력',
-                'in' : 'query',
-                'type' : 'integer',
-                'required' : True,
-            }
         ],
         'responses' : {
             '200' : {
@@ -254,32 +244,16 @@ class Todo(Resource):
         }
     })    
     def get(self):
-        """to do list 조회하기"""
+        """모든 to do list 조회하기"""
         
-        args = get_parser.parse_args()
+        all_to_do = Todos.query.all()
         
-        # 실제 있는 사용자의 번호일때만,
-        exist_user = Users.query.filter(Users.id == args['user_id']).first()
-        
-        if not exist_user:
-            return {
-                'code' : 400,
-                'message' : '사용자의 번호가 존재하지않습니다.'
-            }, 400
-        
-        #  본인이 작성한 투두리스트 전체 목록 조회하기
-        exist_todo = Todos.query.filter(Todos.user_id == args['user_id']).all()
-        
-        if not exist_todo:
-            return {
-                'code' : 400,
-                'message' : f"{args['user_id']}번 사용자가 작성한 투두 리스트는 없습니다."
-            }, 400
+        to_do_list = [todo.get_data_object() for todo in all_to_do]
         
         return {
             'code' : 200,
-            'message' : 'to do list 조회 성공',
+            'message' : '모든 to do list 조회 성공',
             'data' : {
-                'user' : exist_user.get_data_object(need_todos=True),
+                'todos' : to_do_list,
             }
         }
