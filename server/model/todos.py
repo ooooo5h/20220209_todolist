@@ -21,7 +21,7 @@ class Todos(db.Model):
             'user_id' : self.user_id,
             'title' : self.title,
             'content' : self.content,
-            'image_url' : self.image_url,
+            'image_url' : f"https://to-do-list-20220213.s3.ap-northeast-2.amazonaws.com/{self.image_url}" if self.image_url else None,
             'created_at' : str(self.created_at),
             'duedate' : str(self.duedate),
             'is_completed' : self.is_completed,
