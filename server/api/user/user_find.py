@@ -57,7 +57,7 @@ class UserFind(Resource):
             'code' : 200,
             'message' : 'id조회 성공',
             'data' : {
-                'user_id' : exist_user.get_data_object()
+                'user_id' : exist_user.u_id,
             }
         }
    
