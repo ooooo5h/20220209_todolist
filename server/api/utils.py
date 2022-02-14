@@ -3,6 +3,11 @@
 from flask import current_app
 import jwt
 from server.model import Users
+from functools import wraps
+from flask_restful import reqparse
+
+token_parser = reqparse.RequestParser()
+token_parser.add_argument('X-Http-Token', type=str, required=True, location='headers')
 
 def encode_token(user):
     
@@ -39,3 +44,27 @@ def decode_token(token):
         # 잘못된 토큰이 들어와서 복호화에 실패했다면, 예외처리에 의해 이쪽 코드로 빠짐
         # 사용자 없다고 리턴해주기
         return None
+    
+# 데코레이터를 사용하자 => 추가 함수에 적힌 코드를 먼저 실행하고, 그 뒤에 실제함수를 진행시킴
+def token_required(func):
+    
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        # 1. 토큰 파라미터를 받고
+        args = token_parser.parse_args()
+        
+        # 2. 그 토큰으로 실제 사용자를 검색
+        user = decode_token(args['X-Http-Token'])
+        
+        # 3. 사용자가 있다면 실제함수 실행
+        if user:
+            return func(*args, **kwargs)
+        
+        # 4. 사용자가 없다면 403 에러 리턴
+        else :
+            return {
+                'code' : 403,
+                'message' : '올바르지 않은 토큰입니다.'
+            }, 403
+            
+    return decorator
