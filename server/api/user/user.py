@@ -192,7 +192,8 @@ class User(Resource):
             'code' : 200,
             'message' : f"{args['name']}님, 회원가입에 성공하셨습니다.",
             'data' : {
-                'user' : new_user.get_data_object()
+                'user' : new_user.get_data_object(),
+                'token' : encode_token(new_user),
             }
         }
     
