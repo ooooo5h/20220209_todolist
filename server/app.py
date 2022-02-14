@@ -20,12 +20,13 @@ def create_app(config_name):
     api = Api(app, api_spec_url='/api/spec', title='to_do_list', api_version='0.1', catch_all_404s=True)
     
     
-    from server.api.user import User
+    from server.api.user import User, UserFind
     from server.api.todo import Todo
     from server.api.todo import TodoDetail
     from server.api.todo import TodoImage
     
     api.add_resource(User, '/user')
+    api.add_resource(UserFind, '/user/find')
     api.add_resource(Todo, '/todo')
     api.add_resource(TodoDetail, '/todo/<int:todo_id>')
     api.add_resource(TodoImage, '/todoimage')

@@ -8,6 +8,7 @@ class Users(db.Model):
     u_id = db.Column(db.String(20), nullable=False)
     u_pw = db.Column(db.String(20), nullable=False)
     name = db.Column(db.String(20), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
     nickname = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
     signout_at = db.Column(db.DateTime)
@@ -19,6 +20,7 @@ class Users(db.Model):
             'id' : self.id,
             'u_id' : self.u_id,
             'name' : self.name,
+            'phone' : self.phone,
             'nickname' : self.nickname,
             'created_at' : str(self.created_at),
             'signout_at' : str(self.signout_at) if self.signout_at else None, # "None"이 아닌 null로 나가게끔 => 그렇게 해야 프론트에서 쓸 떄 에러안나고 쓰기 좋음 
