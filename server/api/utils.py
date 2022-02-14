@@ -30,7 +30,7 @@ def decode_token(token):
         decoded_dict = jwt.decode(
             token,
             current_app.config['JWT_SECRET'],
-            algorithm = current_app.config['JWT_ALGORITHM'],   
+            algorithms = current_app.config['JWT_ALGORITHM'],   
         )
         
         user = Users.query\
