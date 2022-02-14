@@ -89,7 +89,7 @@ class TodoImage(Resource):
             # TO DO 이미지 경로를 S3_FILE_PATH로 저장하기
             exist_todo_id.image_url = s3_file_path
             db.session.add(exist_todo_id)
-            db.session.commit()
+        db.session.commit()
         
         return {
             'code' : '200',
