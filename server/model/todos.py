@@ -13,8 +13,8 @@ class Todos(db.Model):
     duedate = db.Column(db.Date, nullable=False)
     is_completed = db.Column(db.Boolean, nullable=False, default=False)
     
-    user = db.relationship('Users')
-    
+    todo_images = db.relationship('TodoImages', backref='todoImage')
+        
     def get_data_object(self, need_user_info=False):
         data = {
             'id' : self.id,

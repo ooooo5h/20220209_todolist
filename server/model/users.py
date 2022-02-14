@@ -12,7 +12,7 @@ class Users(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
     signout_at = db.Column(db.DateTime)
     
-    my_toto = db.relationship('Todos')
+    my_toto = db.relationship('Todos', backref= 'user')
     
     def get_data_object(self, need_todos=False):
         data = {
