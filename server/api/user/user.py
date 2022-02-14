@@ -2,6 +2,7 @@
 from flask_restful import Resource, reqparse
 from flask_restful_swagger_2 import swagger
 
+from server.api.utils import encode_token
 from server.model import Users
 from server import db
 
@@ -99,6 +100,7 @@ class User(Resource):
                 'message' : '로그인 성공',
                 'data' : {
                     'user' : login_user_id.get_data_object(),
+                    'token' : encode_token(login_user_id)
                 }
             }
         else : 
