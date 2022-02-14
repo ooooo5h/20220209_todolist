@@ -1,5 +1,5 @@
 # 플라스크에 적용 가능한 환경설정을 모아두는 클래스
-from .my_custom_settings import custom_SQLALCHEMY_DATABASE_URI, AAWS_ACCESS_KEY_ID, AAWS_S3_BUCKET_NAME, AAWS_SECRET_ACCESS_KEY
+from .my_custom_settings import JJWT_ALGORITHM, JJWT_SECRET, custom_SQLALCHEMY_DATABASE_URI, AAWS_ACCESS_KEY_ID, AAWS_S3_BUCKET_NAME, AAWS_SECRET_ACCESS_KEY
 
 class Config(object):
     DEBUG = False
@@ -16,6 +16,10 @@ class Config(object):
     AWS_ACCESS_KEY_ID = AAWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY = AAWS_SECRET_ACCESS_KEY
     AWS_S3_BUCKET_NAME = AAWS_S3_BUCKET_NAME
+    
+    # 토큰 발급시에 사용할 암호화 관련 정보
+    JWT_ALGORITHM = JJWT_ALGORITHM
+    JWT_SECRET = JJWT_SECRET
         
 class ProductionConfig(Config):
     pass
