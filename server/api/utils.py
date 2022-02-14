@@ -1,6 +1,6 @@
 # 토큰을 발급 + 토큰이 들어오면 그 사용자가 누구인지 분석하는 기능을 담당하는 파일.(JWT : Json Web Token )
 
-from flask import current_app
+from flask import current_app, g
 import jwt
 from server.model import Users
 from functools import wraps
@@ -29,7 +29,7 @@ def decode_token(token):
         # 어떤 알고리즘으로 할건지
         decoded_dict = jwt.decode(
             token,
-            current_app['JWT_SECRET'],
+            current_app.config['JWT_SECRET'],
             algorithm = current_app.config['JWT_ALGORITHM'],   
         )
         
@@ -58,6 +58,10 @@ def token_required(func):
         
         # 3. 사용자가 있다면 실제함수 실행
         if user:
+            
+            # 실제 함수에서도 그 사용자를 쓸 수 있게 전달하자
+            g.user = user
+            
             return func(*args, **kwargs)
         
         # 4. 사용자가 없다면 403 에러 리턴
