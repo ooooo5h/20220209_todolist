@@ -1,8 +1,9 @@
 # 사용자 정보와 관련된 기능들을 모아두는 모듈
 from flask_restful import Resource, reqparse
 from flask_restful_swagger_2 import swagger
+from flask import g
 
-from server.api.utils import encode_token
+from server.api.utils import encode_token, token_required
 from server.model import Users
 from server import db
 
@@ -17,9 +18,6 @@ put_parser.add_argument('u_id', type=str, required=True, location='form')
 put_parser.add_argument('u_pw', type=str, required=True, location='form')
 put_parser.add_argument('name', type=str, required=True, location='form')
 put_parser.add_argument('nickname', type=str, required=True, location='form')
-
-delete_parser = reqparse.RequestParser()
-delete_parser.add_argument('id', type=int, required=True, location='args')
 
 patch_parser = reqparse.RequestParser()
 patch_parser.add_argument('id', type=int, required=True, location='form')
@@ -199,13 +197,13 @@ class User(Resource):
     
     @swagger.doc({
         'tags' : ['user'],
-        'description' : '회원 삭제',
+        'description' : '회원 탈퇴',
         'parameters' : [
             {
-                'name' : 'id',
-                'description' : '삭제할 사용자의 번호',
-                'in' : 'query',
-                'type' : 'integer',
+                'name' : 'X-Http-Token',
+                'description' : '사용자의 토큰값',
+                'in' : 'header',
+                'type' : 'string',
                 'required' : True
             }
         ],
@@ -218,19 +216,12 @@ class User(Resource):
             }
         }
     })
+    @token_required
     def delete(self):
-        """회원 삭제"""
-        
-        args = delete_parser.parse_args()
+        """회원 탈퇴"""
         
         # 실제 존재하는 회원 번호인가
-        exist_user = Users.query.filter(Users.id == args['id']).first()
-        
-        if not exist_user :
-            return {
-                'code' : 400,
-                'message' : '존재하지 않는 회원의 번호입니다.'
-            }, 400   
+        exist_user = g.user
         
         exist_user.u_id = '삭제'
         exist_user.u_pw = '삭제'
