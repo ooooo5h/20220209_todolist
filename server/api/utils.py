@@ -2,6 +2,7 @@
 
 from flask import current_app
 import jwt
+from server.model import Users
 
 def encode_token(user):
     
@@ -14,3 +15,27 @@ def encode_token(user):
         current_app.config['JWT_SECRET'],
         algorithm = current_app.config['JWT_ALGORITHM'],
         )  # 실행 결과가 바로 토큰 str로 나오기 때문에 decode 필요없음
+    
+def decode_token(token):
+        
+    try:
+        # 어떤 토큰을 해체할건지
+        # 어떤 비밀키로 복호화할건지
+        # 어떤 알고리즘으로 할건지
+        decoded_dict = jwt.decode(
+            token,
+            current_app['JWT_SECRET'],
+            algorithm = current_app.config['JWT_ALGORITHM'],   
+        )
+        
+        user = Users.query\
+            .filter(Users.id == decoded_dict['id'])\
+            .filter(Users.u_id == decoded_dict['u_id'])\
+            .filter(Users.u_pw == decoded_dict['u_pw'])\
+            .first()
+        return user
+    
+    except jwt.exceptions.DecodeError:
+        # 잘못된 토큰이 들어와서 복호화에 실패했다면, 예외처리에 의해 이쪽 코드로 빠짐
+        # 사용자 없다고 리턴해주기
+        return None
