@@ -21,7 +21,6 @@ put_parser.add_argument('nickname', type=str, required=True, location='form')
 put_parser.add_argument('phone', type=str, required=True, location='form')
 
 patch_parser = reqparse.RequestParser()
-patch_parser.add_argument('id', type=int, required=True, location='form')
 patch_parser.add_argument('field', type=str, required=True, location='form')
 patch_parser.add_argument('value', type=str, required=True, location='form')
 
@@ -229,10 +228,10 @@ class User(Resource):
         'description' : '회원 정보 수정',
         'parameters' : [
             {
-                'name' : 'id',
-                'description' : '몇 번 사용자의 정보를 수정할건지?',
-                'in' : 'formData',
-                'type' : 'integer',
+                'name' : 'X-Http-Token',
+                'description' : '수정할 사용자의 토큰값',
+                'in' : 'header',
+                'type' : 'string',
                 'required' : True,
             },
             {
@@ -260,18 +259,13 @@ class User(Resource):
             },
         }
     })    
+    @token_required
     def patch(self):
         """회원 정보 수정"""
         
         args = patch_parser.parse_args()
         
-        exist_user = Users.query.filter(Users.id == args['id']).first()
-        
-        if exist_user is None:
-            return {
-                'code' : 400,
-                'message' : '존재하지 않는 사용자번호입니다.'
-            }, 400
+        exist_user = g.user
         
         if args['field'] == 'u_pw':
             exist_user.u_pw = args['value']

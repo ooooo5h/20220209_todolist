@@ -36,7 +36,7 @@ def decode_token(token):
         user = Users.query\
             .filter(Users.id == decoded_dict['id'])\
             .filter(Users.u_id == decoded_dict['u_id'])\
-            .filter(Users.u_pw == decoded_dict['u_pw'])\
+            .filter(Users.u_pw_hashed == decoded_dict['u_pw'])\
             .first()
         return user
     
