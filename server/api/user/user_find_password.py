@@ -1,31 +1,36 @@
 from flask_restful import Resource, reqparse
 from flask_restful_swagger_2 import swagger
-from flask import g
 
-from server.api.utils import token_required
 from server.model import Users
-from server import db
 
 get_parser = reqparse.RequestParser()
+get_parser.add_argument('u_id', type=str, required=True, location='args')
 get_parser.add_argument('name', type=str, required=True, location='args')
 get_parser.add_argument('phone', type=str, required=True, location='args')
 
-class UserFind(Resource):
+class UserFindPassword(Resource):
     
     @swagger.doc({
         'tags' : ['user'],
-        'description' : '사용자 ID 찾기 ',
+        'description' : '사용자 비밀번호 찾기 ',
         'parameters' : [
             {
+                'name' : 'u_id',
+                'description' : '사용자 id',
+                'in' : 'query',
+                'type' : 'string',
+                'required' : True,
+            },
+            {
                 'name' : 'name',
-                'description' : '이름',
+                'description' : '사용자 이름',
                 'in' : 'query',
                 'type' : 'string',
                 'required' : True,
             },
             {
                 'name' : 'phone',
-                'description' : '연락처',
+                'description' : '사용자 연락처',
                 'in' : 'query',
                 'type' : 'string',
                 'required' : True,
@@ -33,19 +38,23 @@ class UserFind(Resource):
         ],
         'responses' : {
             '200' : {
-                'description' : '아이디 찾기 성공'
+                'description' : '비밀번호 찾기 성공'
             },
             '400' : {
-                'description' : '아이디 찾기 실패'
+                'description' : '비밀번호 찾기 실패'
             },
         }
     })
     def get(self):
-        """사용자의 아이디를 찾습니다."""
+        """사용자의 비밀번호를 찾습니다."""
         
         args = get_parser.parse_args()
         
-        exist_user = Users.query.filter(Users.name == args['name']).filter(Users.phone == args['phone']).first()
+        exist_user = Users.query\
+            .filter(Users.u_id == args['u_id'])\
+            .filter(Users.name == args['name'])\
+            .filter(Users.phone == args['phone'])\
+            .first()
         
         if not exist_user:
             return {
@@ -55,9 +64,9 @@ class UserFind(Resource):
         
         return {
             'code' : 200,
-            'message' : 'id조회 성공',
+            'message' : '비밀번호 조회 성공',
             'data' : {
-                'user_id' : exist_user.u_id,
+                'user_id' : exist_user.u_pw,
             }
         }
    
