@@ -34,9 +34,9 @@ class Users(db.Model):
     # 비밀번호 암호화하기
     # 비밀번호 대입만 가능, 조회는 불가해야함
     @property
-    def password(self):
+    def u_pw(self):
         raise AttributeError('pw변수는 조회가 불가능합니다.')
     
-    @password.setter
-    def password(self, input_u_pw):
+    @u_pw.setter
+    def u_pw(self, input_u_pw):
         self.u_pw_hashed = input_u_pw
