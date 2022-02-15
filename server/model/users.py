@@ -6,7 +6,7 @@ class Users(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     u_id = db.Column(db.String(20), nullable=False)
-    u_pw = db.Column(db.String(20), nullable=False)
+    u_pw_hashed = db.Column(db.String(32), nullable=False)
     name = db.Column(db.String(20), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
     nickname = db.Column(db.String(20), nullable=False)
