@@ -187,7 +187,7 @@ class User(Resource):
         # 조건 충족했으면 DB에 저장
         new_user = Users()
         new_user.u_id = args['u_id']
-        new_user.u_pw = args['u_pw']
+        new_user.u_pw_hashed = args['u_pw']
         new_user.name = args['name']
         new_user.nickname = args['nickname']
         new_user.phone = args['phone']

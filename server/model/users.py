@@ -30,3 +30,13 @@ class Users(db.Model):
             data['my_totos'] = [mine.get_data_object() for mine in self.my_toto]
         
         return data
+    
+    # 비밀번호 암호화하기
+    # 비밀번호 대입만 가능, 조회는 불가해야함
+    @property
+    def password(self):
+        raise AttributeError('pw변수는 조회가 불가능합니다.')
+    
+    @password.setter
+    def password(self, input_u_pw):
+        self.u_pw_hashed = input_u_pw

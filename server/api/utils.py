@@ -16,7 +16,7 @@ def encode_token(user):
     # 어떤 알고리즘으로 암호화할건지
     
     return jwt.encode(
-        {'id' : user.id, 'u_id' : user.u_id, 'u_pw' : user.u_pw}, 
+        {'id' : user.id, 'u_id' : user.u_id, 'u_pw' : user.u_pw_hashed}, 
         current_app.config['JWT_SECRET'],
         algorithm = current_app.config['JWT_ALGORITHM'],
         )  # 실행 결과가 바로 토큰 str로 나오기 때문에 decode 필요없음
