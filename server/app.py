@@ -24,10 +24,10 @@ def create_app(config_name):
     from server.api.todo import Todo, TodoDetail, TodoImage, TodoDone, TodoByDueDate
     
     api.add_resource(User, '/user')
-    api.add_resource(UserFindId, '/user/find/id')
-    api.add_resource(UserFindPassword, '/user/find/pw')
+    api.add_resource(UserFindId, '/user/findid')
+    api.add_resource(UserFindPassword, '/user/findpw')
     api.add_resource(Todo, '/todo')
-    api.add_resource(TodoByDueDate, '/todo/order_by_duedate')
+    api.add_resource(TodoByDueDate, '/todo/orderbyduedate')
     api.add_resource(TodoDone, '/todo/done')
     api.add_resource(TodoDetail, '/todo/<int:todo_id>')
     api.add_resource(TodoImage, '/todoimage')
