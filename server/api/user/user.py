@@ -92,7 +92,7 @@ class User(Resource):
                 'message' : '아이디가 틀렸습니다.'
             }, 400
         
-        if login_user_id.u_pw == args['u_pw'] :
+        if login_user_id.verify_u_pw(args['u_pw']) :
             # 일차하는 ID가 있고, 그 유저 정보의 PW와 입력한 PW가 일치하는 경우
             return {
                 'code' : 200,

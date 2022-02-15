@@ -45,3 +45,8 @@ class Users(db.Model):
     # u_pw을 암호화해주는 함수 추가
     def generate_u_pw_hash(self, input_u_pw):
         return hashlib.md5(input_u_pw.encode('utf-8')).hexdigest()
+    
+    # 암호화된 비밀번호를 맞는 비밀번호인지 암호화된 값 끼리 비교하는 함수 추가
+    def verify_u_pw(self, input_u_pw):
+        hashed_input_u_pw = self.generate_u_pw_hash(input_u_pw)
+        return self.u_pw_hashed == hashed_input_u_pw
