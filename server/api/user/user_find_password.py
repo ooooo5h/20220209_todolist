@@ -50,23 +50,38 @@ class UserFindPassword(Resource):
         
         args = get_parser.parse_args()
         
-        exist_user = Users.query\
-            .filter(Users.u_id == args['u_id'])\
-            .filter(Users.name == args['name'])\
-            .filter(Users.phone == args['phone'])\
-            .first()
+        exist_u_id = Users.query.filter(Users.u_id == args['u_id']).first()
+            # .filter(Users.name == args['name'])\
+            # .filter(Users.phone == args['phone'])\
         
-        if not exist_user:
+        if not exist_u_id:
             return {
                 'code' : 400,
-                'message' : '존재하지않는 사용자의 정보입니다.'
+                'message' : '존재하지않는 사용자의 정보입니다. ID를 확인해주세요'
             }, 400
+        
+        # id가 일치하면, 이름 검사
+        # 들어온 이름 vs id가 일치하는 유저의 이름                
+        if args['name']  != exist_u_id.name:
+            return {
+                'code' : 400,
+                'message' : '존재하지않는 사용자의 정보입니다. 이름을 확인해주세요'
+            }, 400
+        
+        # id, 이름 일치하면 연락처 검사
+        if args['phone'].replace('-', '') != exist_u_id.phone.replace('-',''):
+            return {
+                'code' : 400,
+                'message' : '존재하지않는 사용자의 정보입니다. 연락처를 확인해주세요'
+            }, 400
+            
+            
         
         return {
             'code' : 200,
             'message' : '비밀번호 조회 성공',
-            'data' : {
-                'user_id' : exist_user.u_pw,
-            }
+            # 'data' : {
+            #     'user_id' : exist_user.u_pw,
+            # }
         }
    
