@@ -5,7 +5,6 @@ from flask import g
 from server import db
 from server.api.utils import token_required
 from server.model import Todos
-from server.model import Users
 
 post_parser = reqparse.RequestParser()
 post_parser.add_argument('title', type=str, required=True, location='form')
