@@ -46,7 +46,7 @@ class UserFindPassword(Resource):
         }
     })
     def get(self):
-        """사용자의 비밀번호를 찾습니다."""
+        """사용자 비밀번호 찾기"""
         
         args = get_parser.parse_args()
         

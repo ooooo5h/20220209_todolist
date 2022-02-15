@@ -78,7 +78,7 @@ class User(Resource):
         }
     })     
     def post(self):
-        """로그인을 시도합니다."""    
+        """로그인"""    
         
         args = post_parser.parse_args()
         
@@ -160,7 +160,7 @@ class User(Resource):
         }
     })
     def put(self):
-        """회원가입을 합니다."""
+        """회원가입"""
         
         args = put_parser.parse_args()
         

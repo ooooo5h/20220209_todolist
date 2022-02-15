@@ -67,7 +67,7 @@ class Todo(Resource):
     })
     @token_required
     def post(self):
-        """to do list를 생성합니다."""
+        """to do list 생성하기"""
         
         # 존재하는 사용자일 때 처리하기
         args = post_parser.parse_args()
@@ -127,7 +127,7 @@ class Todo(Resource):
         }
     })    
     def patch(self):
-        """to do list를 수정합니다."""
+        """to do list 수정하기"""
         
         args = patch_parser.parse_args()
         

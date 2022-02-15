@@ -46,7 +46,7 @@ class TodoImage(Resource):
         }
     })
     def put(self):
-        """to do 이미지 등록하는 기능"""
+        """to do 이미지 등록하기"""
         
         args = put_parser.parse_args()
         

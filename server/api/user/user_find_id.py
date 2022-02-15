@@ -38,7 +38,7 @@ class UserFindId(Resource):
         }
     })
     def get(self):
-        """사용자의 아이디를 찾습니다."""
+        """사용자 ID 찾기"""
         
         args = get_parser.parse_args()
         
