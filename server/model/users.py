@@ -1,4 +1,5 @@
 from server import db
+import hashlib
 
 class Users(db.Model):
     
@@ -39,4 +40,8 @@ class Users(db.Model):
     
     @u_pw.setter
     def u_pw(self, input_u_pw):
-        self.u_pw_hashed = input_u_pw
+        self.u_pw_hashed = self.generate_u_pw_hash(input_u_pw)
+        
+    # u_pw을 암호화해주는 함수 추가
+    def generate_u_pw_hash(self, input_u_pw):
+        return hashlib.md5(input_u_pw.encode('utf-8')).hexdigest()
