@@ -26,29 +26,7 @@ patch_parser.add_argument('field', type=str, required=True, location='form')
 patch_parser.add_argument('value', type=str, required=True, location='form')
 
 class User(Resource):
-    
-    # @swagger.doc({
-    #     'tags' : ['user'],
-    #     'description' : '사용자 정보 조회 기능',
-    #     'parameters' : [
-            
-    #     ],
-    #     'responses' : {
-    #         '200' : {
-    #             'description' : '사용자 정보 조회 성공'
-    #         },
-    #         '400' : {
-    #             'description' : '사용자 정보 조회 실패'
-    #         },
-    #     }
-    # })
-    # def get(self):
-    #     """사용자의 정보를 조회합니다."""
-    #     return {
-    #         'code' : 200,
-    #         'message' : '임시-사용자정보조회'
-    #     }
-   
+       
     @swagger.doc({
         'tags' : ['user'],
         'description' : '로그인 기능',
