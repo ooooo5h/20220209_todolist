@@ -18,6 +18,7 @@ put_parser.add_argument('u_id', type=str, required=True, location='form')
 put_parser.add_argument('u_pw', type=str, required=True, location='form')
 put_parser.add_argument('name', type=str, required=True, location='form')
 put_parser.add_argument('nickname', type=str, required=True, location='form')
+put_parser.add_argument('phone', type=str, required=True, location='form')
 
 patch_parser = reqparse.RequestParser()
 patch_parser.add_argument('id', type=int, required=True, location='form')
@@ -141,6 +142,13 @@ class User(Resource):
                 'type' : 'string',
                 'required' : True,
             },
+            {
+                'name' : 'phone',
+                'description' : '사용할 연락처',
+                'in' : 'formData',
+                'type' : 'string',
+                'required' : True,
+            },
         ],
         'responses' : {
             '200' : {
@@ -182,6 +190,7 @@ class User(Resource):
         new_user.u_pw = args['u_pw']
         new_user.name = args['name']
         new_user.nickname = args['nickname']
+        new_user.phone = args['phone']
         
         db.session.add(new_user)
         db.session.commit()
